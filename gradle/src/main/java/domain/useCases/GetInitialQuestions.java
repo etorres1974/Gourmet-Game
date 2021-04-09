@@ -1,7 +1,6 @@
 package domain.useCases;
 
 import data.FoodAndQuestionsDataSource;
-import data.FoodAndQuestionsRepository;
 import domain.entity.Question;
 
 import java.util.List;

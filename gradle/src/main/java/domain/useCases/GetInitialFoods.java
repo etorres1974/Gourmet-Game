@@ -2,7 +2,6 @@ package domain.useCases;
 
 import com.google.inject.Inject;
 import data.FoodAndQuestionsDataSource;
-import data.FoodAndQuestionsRepository;
 import domain.entity.Food;
 import domain.entity.Question;
 
