@@ -5,7 +5,6 @@ plugins {
 }
 launch4j {
     mainClassName = 'presentation.Home'
-    icon = "${buildDir}/icons/chef_icon.ico"
 }
 
 
