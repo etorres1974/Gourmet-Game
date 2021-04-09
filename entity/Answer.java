@@ -1,16 +1,24 @@
 package entity;
 
 public class Answer {
-    public int questionId;
-    public Boolean value;
+    private int questionId;
+    private Boolean value;
 
-    public Answer(Boolean value, Question question){
-        this.questionId = question.id;
+    public Boolean getValue() {
+        return value;
+    }
+
+    public int getId() {
+        return questionId;
+    }
+
+    public Answer(Boolean value, Question question) {
+        this.questionId = question.getId();
         this.value = value;
     }
 
     @Override
-    public String toString(){
-        return " " + questionId + " - " + value.toString() ;
+    public String toString() {
+        return " " + questionId + " - " + value.toString();
     }
 }

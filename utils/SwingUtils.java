@@ -40,7 +40,7 @@ public class SwingUtils {
 
         List<JRadioButton> buttonList = new ArrayList();
         for(var i = 0; i < foodList.size(); i++){
-            var button = new JRadioButton(foodList.get(i).name);
+            var button = new JRadioButton(foodList.get(i).getName());
             buttonList.add(button);
             panel.add(button);
         }

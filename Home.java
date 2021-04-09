@@ -35,7 +35,7 @@ public class Home {
     public static void  guessFood(){
         var question = questionsQueue.poll();
 
-        var answer = SwingUtils.askQuestion(question.name);
+        var answer = SwingUtils.askQuestion(question.getName());
 
         var givenAnswer = question.createAnswer(answer);
             roundAnswers.add(givenAnswer);
@@ -47,7 +47,7 @@ public class Home {
 
     public static void howManyFoods(int foodCounter){
         if (foodCounter == 1) {
-            var correctAnswer = SwingUtils.testGuess(filtratedFoodList.get(0).name);
+            var correctAnswer = SwingUtils.testGuess(filtratedFoodList.get(0).getName());
             if (correctAnswer) {
                 restartGame(SwingUtils.showCorrectPlayAgain());
             }else {
@@ -109,8 +109,8 @@ public class Home {
     public static void foodListLearnNewQuestion(List<FoodFormData> formData, Question newQuestion){
         formData.forEach(form -> {
                     foodList.forEach(food -> {
-                                if (food.name == form.name)
-                                    food.answers.add(newQuestion.createAnswer(form.active));
+                                if (food.getName() == form.getName())
+                                    food.getAnswers().add(newQuestion.createAnswer(form.getActive()));
                             }
                     );
                 }
