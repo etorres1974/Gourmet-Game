@@ -4,7 +4,7 @@ import domain.entity.FoodFormData;
 
 public class Home {
 
-    static HomeViewModel viewModel = new HomeViewModel();
+    static HomeInteractor viewModel = new HomeViewModel();
 
     public static void main(String[] args) {
         gameLoop();

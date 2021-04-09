@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class HomeViewModel {
+public class HomeViewModel implements HomeInteractor {
 
     private List<Food> foodList;
     private List<Question> questions;
@@ -29,27 +29,33 @@ public class HomeViewModel {
         questionsQueue.addAll(questions);
     }
 
+    @Override
     public List<Food> getFoodList() {
         return foodList;
     }
 
+    @Override
     public Food getFirstFood() {
         return filtratedFoodList.get(0);
     }
 
+    @Override
     public int getRemainingFoodsCounter() {
         return filtratedFoodList.size();
     }
 
+    @Override
     public Question getQuestionFromQueue() {
         return questionsQueue.poll();
     }
 
+    @Override
     public void addAnswer(Answer givenAnswer) {
         roundAnswers.add(givenAnswer);
         filtratedFoodList = filterFoods.execute(filtratedFoodList, givenAnswer);
     }
 
+    @Override
     public void resetRound() {
         filtratedFoodList = new ArrayList(foodList);
         roundAnswers = new ArrayList();
@@ -84,6 +90,7 @@ public class HomeViewModel {
         );
     }
 
+    @Override
     public void learnNewFoodAndQuestion(List<FoodFormData> formData, String newQuestionName, String newFoodName) {
         var newQuestion = learnNewQuestion(newQuestionName);
         learnNewFood(newFoodName, newQuestion);
