@@ -1,5 +1,7 @@
 #### The problem
-This application is a guessing food game! The user will be presented with a characteristic and should confirm or deny it, and based on the answers we should give the correct answer.
+This application is a guessing food game! 
+The user will be presented with a characteristic and should confirm or deny it, 
+and based on the answers we should give the correct answer.
 
 #### Basic Flow
 The following image describes the steps to learn how to guess foods based on questions about then.
@@ -48,7 +50,13 @@ Meanwhile, the tomatoes questions would give a heuristic value of 0, and in this
 [Pizza, Lasagna] or [Yakisoba, Nhoque] reducing the possibilities by half.
 
 To leverage on the heuristic value will be using a [priority queue](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/PriorityQueue.html),
-to store questions and ordering by the heuristic value providing always the best question when polling an object.
+to store questions and ordering by the heuristic value providing always the best question when polling a question. 
+This way we always ask the most efficient question and end the game with lesser questions.
 
+The side effect of this approach is that each game will have questions in different order,
+and thus the matrix presented before will not be completed, since some foods will be found
+with lesser questions. 
+Because of that we will be tracking questions and answers by ids 
+and not as simple Strings or booleans as the examples suggest.
 
 
