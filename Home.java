@@ -15,32 +15,37 @@ public class Home {
     static List<Question> questions = new ArrayList();
     static PriorityQueue<Question> questionsQueue = new PriorityQueue(new QuestionComparator());
 
+    static List<Food> filtratedFoodList = new ArrayList();
+    static List<Answer> roundAnswers = new ArrayList();
     public static void main(String[] args) {
-        initialData();
+        setInitialData();
         gameLoop();
     }
-    public static void calculateHeights(){
+    public static void calculatePriority(){
         questions.parallelStream().forEach( question -> question.calculateWeight());
     }
 
     public static void gameLoop(){
-        var filtratedFoodList = new ArrayList(foodList);
-        var roundAnswers = new ArrayList<Answer>();
+        filtratedFoodList = new ArrayList(foodList);
+        roundAnswers = new ArrayList();
         SwingUtils.showGreetings();
-        guessFood(filtratedFoodList, roundAnswers);
+        guessFood();
     }
 
-    public static void  guessFood(List<Food> filtratedFoodList, ArrayList<Answer> roundAnswers){
+    public static void  guessFood(){
         var question = questionsQueue.poll();
-        System.out.println("Remaining questions " + questionsQueue);
+
         var answer = SwingUtils.askQuestion(question.name);
 
         var givenAnswer = question.createAnswer(answer);
             roundAnswers.add(givenAnswer);
 
-        filtratedFoodList = filterFoods(filtratedFoodList, givenAnswer);
+        filtratedFoodList = getFilterFoods(filtratedFoodList, givenAnswer);
         var foodCounter = filtratedFoodList.size();
+        howManyFoods(foodCounter);
+    }
 
+    public static void howManyFoods(int foodCounter){
         if (foodCounter == 1) {
             var correctAnswer = SwingUtils.testGuess(filtratedFoodList.get(0).name);
             if (correctAnswer) {
@@ -53,31 +58,29 @@ public class Home {
             askForLearn(roundAnswers);
             restartGame(SwingUtils.showWrongPlayAgain());
         } else {
-            guessFood(filtratedFoodList, roundAnswers);
+            guessFood();
         }
     }
 
-
-
-
-    public static void initialData(){
+    public static void setInitialData(){
         questions = DataProvider.initialQuestions();
         foodList = DataProvider.initialFoodList(questions);
-        calculateHeights();
-        questions.forEach( question -> questionsQueue.add(question) );
+        calculatePriority();
+        questionsQueue.addAll(questions);
     }
 
     public static void restartGame(Boolean playAgain){
         if(playAgain) {
             questionsQueue = new PriorityQueue(new QuestionComparator());
-            questions.forEach(question -> questionsQueue.add(question));
-            System.out.println("new question queue : " + questionsQueue);
+            calculatePriority();
+            questionsQueue.addAll(questions);
+            System.out.println("Priority \n" + questionsQueue);
             gameLoop();
         }
     }
 
-    public static List<Food> filterFoods(List<Food> foodList, Answer answer){
-        return foodList.stream() //Todo change to paralel
+    public static List<Food> getFilterFoods(List<Food> foodList, Answer answer){
+        return foodList.parallelStream()
                 .filter( food -> food.matchAnswer(answer) )
                 .collect(Collectors.toList());
     }
@@ -90,7 +93,6 @@ public class Home {
         var newQuestion = learnNewQuestion(newQuestionName);
         learnNewFood(newFoodName, newQuestion, roundAnswers);
         foodListLearnNewQuestion(formData, newQuestion);
-        calculateHeights();
     }
 
     public static void learnNewFood(String newFoodName,Question newQuestion ,List<Answer> answers){
@@ -101,7 +103,6 @@ public class Home {
     public static Question learnNewQuestion(String newQuestionName){
         var newQuestion = new Question(newQuestionName);
         questions.add(newQuestion);
-        System.out.println("New question list : " + questions);
         return newQuestion;
     }
 
@@ -114,6 +115,5 @@ public class Home {
                     );
                 }
         );
-        System.out.println("New food list : " + foodList);
     }
 }

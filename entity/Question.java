@@ -8,7 +8,7 @@ public class Question {
     static int LAST_ID = - 1;
     public int id;
     public String name;
-    public int weight;
+    public Float heuristicValue;
     public List<Answer> answers;
 
     public Answer createAnswer(Boolean answer){
@@ -21,10 +21,11 @@ public class Question {
         this.id = LAST_ID + 1;
         this.name = name;
         this.answers = new ArrayList();
+        this.heuristicValue = 0F;
         LAST_ID = id;
     }
 
-    public Integer calculateWeight() {
+    public void calculateWeight() {
         AtomicInteger correct = new AtomicInteger();
         AtomicInteger wrong = new AtomicInteger();
         this.answers.forEach( answer ->{
@@ -34,14 +35,14 @@ public class Question {
                 wrong.getAndIncrement();
 
         });
-        weight = Math.abs( correct.intValue() - wrong.intValue() );
-        System.out.println(id + "-" + name + " = " + weight + " \n");
-        return weight;
+        var weight = Math.abs( correct.intValue() - wrong.intValue() );
+        heuristicValue += (float)answers.size() / (weight + 1);
+        System.out.println(id + "-" + name + " = " + heuristicValue + " = "+ answers.size() + " / " + (weight + 1));
     }
 
 
     @Override
     public String toString(){
-        return "Name :" + name + ", weight : " + weight;
+        return "Name :" + name + ", weight : " + heuristicValue;
     }
 }

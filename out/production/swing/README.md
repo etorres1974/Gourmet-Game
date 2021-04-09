@@ -1,29 +1,37 @@
-entity.Food Guess
 #### The problem
+This application is a guessing food game! 
+The user will be presented with a characteristic and should confirm or deny it, 
+and based on the answers we should give the correct answer.
 
 #### Basic Flow
-This Application basic flow uses the flow describe bellow to learn how to guess foods based on questions abou then.
+The following image describes the steps to learn how to guess foods based on questions about then.
 
-![Alt text](GuessFood.svg "Guessflow")
+![Alt text](GuessFood.svg)
 
-First Step , user answer a question and then we filter wich foods are true for that question, and see if there are more than 1 possible matches.
+First Step , we give user a question. 
+Based on the answer we will filter which foods are true for that question, and count the matches.
+While there are more than 1 possible food we repeat this process until the remaining food counter hit :
+- 1 -> try to guess. 
+- 0 -> learn this scenario.
 
-If we only found one food, the job is done. Otherwise if there are more then one possible answer we need to filter the foods again. For that we filter wich questions still are relevant and repeat the first step. In case that no food match, we ask user to teach as a new question and how to answer it for all previous foods.
+If the guess is correct, user can play again, otherwise it should teach the application how to win next time.
 
-Example
+#### Example
 Questions : 
-["is pasta?", "is Italian", "is Japanese", "is Round", "has tomatoes", "has noodles"]
+```
+["is pasta?", "is italian", "is japanese", "is round", "has tomatoes", "has noodles"]
+```
 Foods :
+```
     Pizza [true, true, false, true, true]
     Yakisoba [true, false, true, false, false, true]
     Nhoque [true, true, false, false, true, false]
     Lasagna [true, true, false, false, true, false]
+```
 
 ##### Implementation
-    For every question interate trought N food once filtering wich has true. The filtering funcion interates trought and array of questions.
-    fiven q as number of questions and f number of foods
-    we can represent this problema as matrix of (q, f)
-    
+We can represent this problem as a matrix of (questions, foods)
+```    
               Pizza, Nhoque, Yakisoba, Lasagna
     pasta       T       T       T       T
     Italian     T       T       F       T
@@ -31,31 +39,43 @@ Foods :
     Round       T       F       F       F
     tomatoes    T       F       F       T
     noodles     F       F       T       F
+```
 
-To improve the algorithim eficiency whe need to make questions where more foods will be discarted. Therefore we can create an heuristic base on the absolute difference of Trues or Falses  amount and optmize for 0 since is this we would reduce de possibilities by half.
-In the given example, learning if the user wants pasta would give an heuristic value of 3, and in the next question we still have the same amount of foods. Meanwhile, the tomatoes questions would give an heustic value of 0, and in this case would split the possibilities to either [Pizza, Lasagna] or [Yakisoba, Nhoque].
+To improve the algorithm efficiency whe need to make questions where more foods will be discarded. 
+Therefore, we can create a heuristic based on the absolute difference of True or False amount.
 
-To keep track of best heuristc values we will be using a [priority queue](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/PriorityQueue.html), store questions and ordering by the heuristic value providing always the best question when popping an object.
+To leverage on the heuristic value will be using a [priority queue](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/PriorityQueue.html),
+to store questions and ordering by the heuristic value providing always the best question when polling a question. 
+This way we always ask the most efficient question and end the game with lesser questions.
 
-#### PseudoCode Setps 
-PriorityQueue : questions
-List<String> :  foods
-1 - Pop question -> Show entity.Question
-2 - Save Answer -> Filter Foods Based on entity.Question
-3 - How many foods?
-    - 1    -> Show Answer
-    - 0    -> Receive new question -> Add to question 
-    - else -> Return step 1
+The side effect of this approach is that each game will have questions in different order,
+and thus the matrix presented before will not be completed, since some foods will be found
+with lesser questions. 
+The following example represents a more accurate version of the used matrix.
 
-Iterate trought foods is O(N).
- By saving one index reference for questions in the same order they are in foods, we can create a function for matching questions and foods with O(N).
+```
 
-1 - (extract from min heap in java is O(Log(N)))
-2 - (O(N))
-3 - (insert in min heap in java is O(Log n))
-total = Log(N) + O(N)
-In the worst case questions only remove one item from foods, assuming user created a relevant questions, making that there are no better questions and there for we need to ask all of then, repeting this cicle for the same amount of questions.
-Best case all questions cut foods in half.
-###Check this
-Worst -> O (n log(n) + n²)
-Best  -> O (log(n)² + n log(n))
+Question list by id-name-weight : [0-pasta-1, 1-sweet-0, 2-deepFry,-2, 3-rounded-3, 4-cold-3]
+
+  Chocolae Cake [ 0 - false,  1 - true,   2 - false,  3 - false,  4 - false]
+  Lasagna       [ 0 - true,   1 - false,  2 - false,  3 - false,  4 - false]
+  Coxinha       [ 0 - true,               2 - true,   3 - false,  4 - false]
+  Pizza         [ 0 - true,               2 - false,  3 - true,   4 - false]
+  IceCream      [ 0 - false,                          3 - false   4 - true ]
+```
+Assuming player will always answer no in the next round, the questions will show in the following order:
+1. rounded? [Pizza] or [Chocolate Cake, Lasagna, Coxinha, IceCream]
+2. cold? [Ice Cream] or [Chocolate Cake, Lasagna, Coxinha]
+3. deepFry? [Coxinha] or [Chocolate Cake, Lasagna]
+4. pasta? [Lasagna] or [Chocolate Cake]
+
+Withot the heuristic, the oder would be the starting question order leading to a dead end since both answers can be wrong here.
+1. pasta? [Lasagna, Coxinha, pizza] or [Chocolate Cake, IceCream]
+2. sweet? [Chocolate Cake] or [Ice Cream]?
+
+Furthermore we need also to acount for how many answers the questions has, since up to now we would get the same value for 
+an answer with 1 true and 1 false, or 50 true and 50 false values. To account that we be changing our heuristic to be
+    weight = the absolute difference of True or False amount * 1/10
+    heuristic value  = answers amount / weight + 1 
+
+This way smaller values for weight lead to higher heuristica value, and we avoid division by 0.
