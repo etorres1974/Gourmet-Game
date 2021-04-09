@@ -57,7 +57,6 @@ public class Question {
         System.out.println(id + "-" + name + " = " + heuristicValue + " = " + answers.size() + " / " + (weight + 1));
     }
 
-
     @Override
     public String toString() {
         return "Name :" + name + ", weight : " + heuristicValue;

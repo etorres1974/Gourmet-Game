@@ -6,9 +6,6 @@ import java.util.List;
 
 public class CalculatePriority {
 
-    public CalculatePriority() {
-    }
-
     public void execute(List<Question> questions) {
         questions.parallelStream().forEach(question -> question.calculateWeight());
     }

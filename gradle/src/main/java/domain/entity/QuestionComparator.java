@@ -21,7 +21,6 @@ public class QuestionComparator implements Comparator<Question> {
             return 0;
     }
 
-
     public int compareHeuristic(Question o1, Question o2){
         if (o1.getHeuristicValue() < o2.getHeuristicValue())
             return 1;

@@ -7,8 +7,6 @@ import domain.entity.Answer;
 import domain.entity.Food;
 import domain.entity.Question;
 import domain.useCases.CalculatePriority;
-import domain.useCases.FilterFoods;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import presentation.GameModule;
@@ -19,12 +17,13 @@ import java.util.Comparator;
 import java.util.List;
 
 public class CalculatePriorityTest {
-    @Inject private static CalculatePriority calculatePriority;
+    @Inject
+    private static CalculatePriority calculatePriority;
     private static List<Food> foodList;
     private static List<Question> questions;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         Injector injector = Guice.createInjector(new GameModule());
         calculatePriority = injector.getInstance(CalculatePriority.class);
         questions = getMockQuestions();
@@ -32,7 +31,7 @@ public class CalculatePriorityTest {
     }
 
     @Test
-    public void given_same_aswers_questions_with_more_answers_should_give_higher_priority(){
+    public void given_same_aswers_questions_with_more_answers_should_give_higher_priority() {
         calculatePriority.execute(questions);
         System.out.println(questions);
 
@@ -41,7 +40,7 @@ public class CalculatePriorityTest {
         System.out.println(orderByHeuristic);
 
         List<Question> orderByWeight = new ArrayList(questions);
-        orderByWeight.sort(Comparator.comparing( q -> q.getAnswers().size()));
+        orderByWeight.sort(Comparator.comparing(q -> q.getAnswers().size()));
         System.out.println(orderByWeight);
 
         assert (orderByHeuristic.equals(orderByWeight));
@@ -65,7 +64,7 @@ public class CalculatePriorityTest {
         return list;
     }
 
-   private static Food mockFood1(List<Question> questions) {
+    private static Food mockFood1(List<Question> questions) {
         var answers = new ArrayList<Answer>();
         answers.add(questions.get(0).createAnswer(false));
         return new Food("Coxinha ", answers);
