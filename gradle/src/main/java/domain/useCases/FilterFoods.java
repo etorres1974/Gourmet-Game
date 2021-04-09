@@ -8,9 +8,6 @@ import java.util.stream.Collectors;
 
 public class FilterFoods {
 
-    public FilterFoods() {
-    }
-
     public static List<Food> execute(List<Food> foodList, Answer answer) {
         return foodList.parallelStream()
                 .filter(food -> food.matchAnswer(answer))

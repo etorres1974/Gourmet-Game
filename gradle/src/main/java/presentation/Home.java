@@ -1,12 +1,17 @@
 package presentation;
 
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import domain.entity.FoodFormData;
 
 public class Home {
 
-    static HomeInteractor viewModel = new HomeViewModel();
+    static HomeInteractor viewModel;
 
     public static void main(String[] args) {
+        Injector injector = Guice.createInjector(new GameModule());
+        viewModel = injector.getInstance(HomeInteractor.class);
         gameLoop();
     }
 

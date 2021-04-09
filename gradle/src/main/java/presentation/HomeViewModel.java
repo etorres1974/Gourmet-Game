@@ -1,5 +1,6 @@
 package presentation;
 
+import com.google.inject.Inject;
 import domain.entity.*;
 import domain.useCases.CalculatePriority;
 import domain.useCases.FilterFoods;
@@ -14,19 +15,25 @@ public class HomeViewModel implements HomeInteractor {
 
     private List<Food> foodList;
     private List<Question> questions;
-    private PriorityQueue<Question> questionsQueue = new PriorityQueue(new QuestionComparator());
+    private PriorityQueue<Question> questionsQueue;
     private List<Food> filtratedFoodList = new ArrayList();
     private List<Answer> roundAnswers = new ArrayList();
 
-    private CalculatePriority calculatePriority = new CalculatePriority();
-    private FilterFoods filterFoods = new FilterFoods();
-    private GetInitialQuestions initialQuestions = new GetInitialQuestions();
-    private GetInitialFoods initialFoods = new GetInitialFoods();
+    private CalculatePriority calculatePriority;
+    private FilterFoods filterFoods;
 
-    public HomeViewModel() {
+    @Inject
+    public HomeViewModel(GetInitialFoods initialFoods,
+                         GetInitialQuestions initialQuestions,
+                         FilterFoods filterFoods,
+                         CalculatePriority calculatePriority,
+                         PriorityQueue<Question> questionsQueue) {
         questions = initialQuestions.execute();
+        this.questionsQueue = questionsQueue;
         foodList = initialFoods.execute(questions);
         questionsQueue.addAll(questions);
+        this.calculatePriority = calculatePriority;
+        this.filterFoods = filterFoods;
     }
 
     @Override
