@@ -1,4 +1,4 @@
-package entity;
+package domain.entity;
 
 import javax.swing.*;
 import java.util.List;

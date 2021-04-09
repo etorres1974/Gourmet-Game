@@ -1,6 +1,6 @@
-package utils;
+package presentation;
 
-import entity.Food;
+import domain.entity.Food;
 
 import javax.swing.*;
 import java.util.ArrayList;

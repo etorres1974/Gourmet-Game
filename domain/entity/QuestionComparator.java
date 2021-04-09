@@ -1,8 +1,10 @@
-import entity.Question;
+package domain.entity;
+
+import domain.entity.Question;
 
 import java.util.Comparator;
 
-class QuestionComparator implements Comparator<Question> {
+public class QuestionComparator implements Comparator<Question> {
 
     @Override
     public int compare(Question o1, Question o2) {

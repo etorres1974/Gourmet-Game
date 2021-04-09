@@ -1,4 +1,4 @@
-package entity;
+package domain.entity;
 
 public class Answer {
     private int questionId;

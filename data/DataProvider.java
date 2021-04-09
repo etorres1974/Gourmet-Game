@@ -1,8 +1,8 @@
-package utils;
+package data;
 
-import entity.Answer;
-import entity.Food;
-import entity.Question;
+import domain.entity.Answer;
+import domain.entity.Food;
+import domain.entity.Question;
 
 import java.util.ArrayList;
 import java.util.List;
