@@ -7,9 +7,9 @@ import domain.entity.Question;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataProvider {
+public class FoodAndQuestionsRepository implements FoodAndQuestionsDataSource {
 
-    public DataProvider(){
+    public FoodAndQuestionsRepository(){
 
     }
 
