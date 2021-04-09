@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'edu.sc.seis.launch4j' version '2.4.9'
+}
+launch4j {
+    mainClassName = 'presentation.Home'
+    icon = "${buildDir}/icons/chef_icon.ico"
+}
+
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+    implementation group: 'com.google.inject', name: 'guice', version: '4.0'
+}
+
+application {
+    mainClass.set("presentation.Home")
+}
+apply plugin: 'java'
+apply plugin: 'edu.sc.seis.launch4j'
+
+test {
+    useJUnitPlatform()
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

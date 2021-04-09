@@ -1,0 +1,3 @@
+includeFlat 'gradle'
+rootProject.name = "gourmet_game"
+include("app")

@@ -1,7 +1,5 @@
 package domain.entity;
 
-import domain.entity.Question;
-
 import java.util.Comparator;
 
 public class QuestionComparator implements Comparator<Question> {
