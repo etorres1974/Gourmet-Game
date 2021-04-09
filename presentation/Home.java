@@ -20,7 +20,7 @@ public class Home {
         var question = viewModel.getQuestionFromQueue();
         var answer = SwingUtils.askQuestion(question.getName());
         var givenAnswer = question.createAnswer(answer);
-        viewModel.addAnswerList(givenAnswer);
+        viewModel.addAnswer(givenAnswer);
         howManyFoods(viewModel.getRemainingFoodsCounter());
     }
 
@@ -53,8 +53,6 @@ public class Home {
         var newQuestionName = SwingUtils.learnQuestion(newFoodName);
         var buttonList = SwingUtils.showOptionsToLearn(newQuestionName, viewModel.getFoodList());
         var formData = FoodFormData.fromButtonList(buttonList);
-        var newQuestion = viewModel.learnNewQuestion(newQuestionName);
-        viewModel.learnNewFood(newFoodName, newQuestion);
-        viewModel.foodListLearnNewQuestion(formData, newQuestion);
+        viewModel.learnNewFoodAndQuestion(formData, newQuestionName, newFoodName);
     }
 }

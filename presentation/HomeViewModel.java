@@ -13,13 +13,13 @@ public class HomeViewModel {
     private static List<Food> foodList = new ArrayList();
     private static List<Question> questions = new ArrayList();
     private static PriorityQueue<Question> questionsQueue = new PriorityQueue(new QuestionComparator());
-
     private static List<Food> filtratedFoodList = new ArrayList();
     private static List<Answer> roundAnswers = new ArrayList();
 
-    public void addAnswerList(Answer givenAnswer) {
-        roundAnswers.add(givenAnswer);
-        filtratedFoodList = getFilterFoods(filtratedFoodList, givenAnswer);
+    public HomeViewModel() {
+        questions = DataProvider.initialQuestions();
+        foodList = DataProvider.initialFoodList(questions);
+        questionsQueue.addAll(questions);
     }
 
     public List<Food> getFoodList() {
@@ -38,10 +38,9 @@ public class HomeViewModel {
         return questionsQueue.poll();
     }
 
-    public HomeViewModel() {
-        questions = DataProvider.initialQuestions();
-        foodList = DataProvider.initialFoodList(questions);
-        questionsQueue.addAll(questions);
+    public void addAnswer(Answer givenAnswer) {
+        roundAnswers.add(givenAnswer);
+        filtratedFoodList = getFilterFoods(filtratedFoodList, givenAnswer);
     }
 
     public void resetRound() {
@@ -50,15 +49,16 @@ public class HomeViewModel {
         remakeQuestionQueue();
     }
 
-    public void calculatePriority() {
-        questions.parallelStream().forEach(question -> question.calculateWeight());
-    }
-
-    public void remakeQuestionQueue() {
+    private void remakeQuestionQueue() {
         questionsQueue = new PriorityQueue(new QuestionComparator());
         calculatePriority();
         questionsQueue.addAll(questions);
     }
+
+    private void calculatePriority() {
+        questions.parallelStream().forEach(question -> question.calculateWeight());
+    }
+
 
     public static List<Food> getFilterFoods(List<Food> foodList, Answer answer) {
         return foodList.parallelStream()
@@ -66,18 +66,18 @@ public class HomeViewModel {
                 .collect(Collectors.toList());
     }
 
-    public static void learnNewFood(String newFoodName, Question newQuestion) {
+    private void learnNewFood(String newFoodName, Question newQuestion) {
         roundAnswers.add(newQuestion.createAnswer(true));
         foodList.add(new Food(newFoodName, roundAnswers));
     }
 
-    public static Question learnNewQuestion(String newQuestionName) {
+    private Question learnNewQuestion(String newQuestionName) {
         var newQuestion = new Question(newQuestionName);
         questions.add(newQuestion);
         return newQuestion;
     }
 
-    public static void foodListLearnNewQuestion(List<FoodFormData> formData, Question newQuestion) {
+    private void foodListLearnNewQuestion(List<FoodFormData> formData, Question newQuestion) {
         formData.forEach(form -> {
                     foodList.forEach(food -> {
                                 if (food.getName() == form.getName())
@@ -86,5 +86,11 @@ public class HomeViewModel {
                     );
                 }
         );
+    }
+
+    public void learnNewFoodAndQuestion(List<FoodFormData> formData, String newQuestionName, String newFoodName) {
+        var newQuestion = learnNewQuestion(newQuestionName);
+        learnNewFood(newFoodName, newQuestion);
+        foodListLearnNewQuestion(formData, newQuestion);
     }
 }
