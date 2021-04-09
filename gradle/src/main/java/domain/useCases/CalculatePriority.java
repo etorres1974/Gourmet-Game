@@ -9,7 +9,7 @@ public class CalculatePriority {
     public CalculatePriority() {
     }
 
-    public static void execute(List<Question> questions) {
+    public void execute(List<Question> questions) {
         questions.parallelStream().forEach(question -> question.calculateWeight());
     }
 }

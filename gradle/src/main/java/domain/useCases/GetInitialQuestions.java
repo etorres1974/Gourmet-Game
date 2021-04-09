@@ -11,7 +11,6 @@ public class GetInitialQuestions {
         this.dataProvider = dataProvider;
     }
 
-
     public List<Question> execute() {
         return dataProvider.getInitialQuestions();
     }
