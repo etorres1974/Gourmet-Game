@@ -22,10 +22,6 @@ public class HomeViewModel {
         filtratedFoodList = getFilterFoods(filtratedFoodList, givenAnswer);
     }
 
-    public List<Answer> getRoundAnswers() {
-        return roundAnswers;
-    }
-
     public List<Food> getFoodList() {
         return foodList;
     }

@@ -43,7 +43,6 @@ public class Home {
 
     public static void restartGame(Boolean playAgain) {
         if (playAgain) {
-
             viewModel.resetRound();
             gameLoop();
         }
