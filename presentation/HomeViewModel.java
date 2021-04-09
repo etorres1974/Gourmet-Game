@@ -1,14 +1,14 @@
 package presentation;
 
-import data.DataProvider;
 import domain.entity.*;
 import domain.useCases.CalculatePriority;
 import domain.useCases.FilterFoods;
+import domain.useCases.GetInitialFoods;
+import domain.useCases.GetInitialQuestions;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.stream.Collectors;
 
 public class HomeViewModel {
 
@@ -18,12 +18,14 @@ public class HomeViewModel {
     private List<Food> filtratedFoodList = new ArrayList();
     private List<Answer> roundAnswers = new ArrayList();
 
-    private CalculatePriority calculatePriority= new CalculatePriority();
+    private CalculatePriority calculatePriority = new CalculatePriority();
     private FilterFoods filterFoods = new FilterFoods();
+    private GetInitialQuestions initialQuestions = new GetInitialQuestions();
+    private GetInitialFoods initialFoods = new GetInitialFoods();
 
     public HomeViewModel() {
-        questions = DataProvider.initialQuestions();
-        foodList = DataProvider.initialFoodList(questions);
+        questions = initialQuestions.execute();
+        foodList = initialFoods.execute(questions);
         questionsQueue.addAll(questions);
     }
 
