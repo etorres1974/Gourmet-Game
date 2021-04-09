@@ -1,8 +1,7 @@
 package presentation;
 
-import domain.entity.*;
 import data.DataProvider;
-import presentation.SwingUtils;
+import domain.entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
