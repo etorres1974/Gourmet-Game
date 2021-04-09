@@ -76,8 +76,8 @@ Withot the heuristic, the oder would be the starting question order leading to a
 Furthermore we need also to acount for how many answers the questions has, since up to now we would get the same value for 
 an answer with 1 true and 1 false, or 50 true and 50 false values. To account that we be changing our heuristic to be
     
-    weight = the absolute difference of True or False amount * 1/10
-    heuristic value  += answers amount / weight + 1 
+    weight = the absolute difference of True or False amount 
+    heuristic value  += answers amount / ( weight + 1 )
 
 This way smaller values for weight lead to higher heuristica value, and we avoid division by 0. 
 We also are accumulating the heuristic value each restart as a way to reinforce good questions from previous games.
