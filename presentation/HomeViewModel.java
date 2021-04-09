@@ -2,6 +2,8 @@ package presentation;
 
 import data.DataProvider;
 import domain.entity.*;
+import domain.useCases.CalculatePriority;
+import domain.useCases.FilterFoods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +12,14 @@ import java.util.stream.Collectors;
 
 public class HomeViewModel {
 
-    private static List<Food> foodList = new ArrayList();
-    private static List<Question> questions = new ArrayList();
-    private static PriorityQueue<Question> questionsQueue = new PriorityQueue(new QuestionComparator());
-    private static List<Food> filtratedFoodList = new ArrayList();
-    private static List<Answer> roundAnswers = new ArrayList();
+    private List<Food> foodList;
+    private List<Question> questions;
+    private PriorityQueue<Question> questionsQueue = new PriorityQueue(new QuestionComparator());
+    private List<Food> filtratedFoodList = new ArrayList();
+    private List<Answer> roundAnswers = new ArrayList();
+
+    private CalculatePriority calculatePriority= new CalculatePriority();
+    private FilterFoods filterFoods = new FilterFoods();
 
     public HomeViewModel() {
         questions = DataProvider.initialQuestions();
@@ -40,7 +45,7 @@ public class HomeViewModel {
 
     public void addAnswer(Answer givenAnswer) {
         roundAnswers.add(givenAnswer);
-        filtratedFoodList = getFilterFoods(filtratedFoodList, givenAnswer);
+        filtratedFoodList = filterFoods.execute(filtratedFoodList, givenAnswer);
     }
 
     public void resetRound() {
@@ -51,19 +56,8 @@ public class HomeViewModel {
 
     private void remakeQuestionQueue() {
         questionsQueue = new PriorityQueue(new QuestionComparator());
-        calculatePriority();
+        calculatePriority.execute(questions);
         questionsQueue.addAll(questions);
-    }
-
-    private void calculatePriority() {
-        questions.parallelStream().forEach(question -> question.calculateWeight());
-    }
-
-
-    public static List<Food> getFilterFoods(List<Food> foodList, Answer answer) {
-        return foodList.parallelStream()
-                .filter(food -> food.matchAnswer(answer))
-                .collect(Collectors.toList());
     }
 
     private void learnNewFood(String newFoodName, Question newQuestion) {
