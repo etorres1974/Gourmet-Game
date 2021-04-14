@@ -2,7 +2,6 @@ package presentation;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import domain.entity.FoodFormData;
 
 public class Home {
 
@@ -17,31 +16,27 @@ public class Home {
     public static void gameLoop() {
         viewModel.resetRound();
         SwingUtils.showGreetings();
-        guessFood();
+        askQuestion();
     }
 
-    public static void guessFood() {
-        var question = viewModel.getQuestionFromQueue();
-        var answer = SwingUtils.askQuestion(question.getName());
-        var givenAnswer = question.createAnswer(answer);
-        viewModel.addAnswer(givenAnswer);
-        howManyFoods(viewModel.getRemainingFoodsCounter());
+    public static void askQuestion() {
+        var question = viewModel.getQuestion();
+        var answer = SwingUtils.askQuestion(question);
+        viewModel.addAnswer(answer);
+        if(viewModel.getHasGuess())
+            tryGuess();
+        else
+            askQuestion();
     }
 
-    public static void howManyFoods(int foodCounter) {
-        if (foodCounter == 1) {
-            var correctAnswer = SwingUtils.testGuess(viewModel.getFirstFood().getName());
-            if (correctAnswer) {
-                restartGame(SwingUtils.showCorrectPlayAgain());
-            } else {
-                askForLearn();
-                restartGame(SwingUtils.showWrongPlayAgain());
-            }
-        } else if (foodCounter == 0) {
-            askForLearn();
-            restartGame(SwingUtils.showWrongPlayAgain());
+    public static void tryGuess() {
+        var guess = viewModel.getGuess();
+        var correctAnswer = SwingUtils.testGuess(guess);
+        if (correctAnswer) {
+            restartGame(SwingUtils.showCorrectPlayAgain());
         } else {
-            guessFood();
+            askForLearn(guess);
+            restartGame(SwingUtils.showWrongPlayAgain());
         }
     }
 
@@ -52,11 +47,9 @@ public class Home {
         }
     }
 
-    public static void askForLearn() {
-        var newFoodName = SwingUtils.learnFood();
-        var newQuestionName = SwingUtils.learnQuestion(newFoodName);
-        var buttonList = SwingUtils.showOptionsToLearn(newQuestionName, viewModel.getFoodList());
-        var formData = FoodFormData.fromButtonList(buttonList);
-        viewModel.learnNewFoodAndQuestion(formData, newQuestionName, newFoodName);
+    public static void askForLearn(String wrongFood) {
+        var newFood = SwingUtils.learnFood();
+        var newQuestionName = SwingUtils.learnQuestion(wrongFood, newFood);
+        viewModel.learnNewQuestion(newQuestionName, wrongFood, newFood);
     }
 }
