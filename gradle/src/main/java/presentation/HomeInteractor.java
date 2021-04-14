@@ -1,24 +1,16 @@
 package presentation;
 
-import domain.entity.Answer;
-import domain.entity.Food;
-import domain.entity.FoodFormData;
-import domain.entity.Question;
-
-import java.util.List;
-
 public interface HomeInteractor {
-    List<Food> getFoodList();
 
-    Food getFirstFood();
+    String getGuess();
 
-    int getRemainingFoodsCounter();
+    Boolean getHasGuess();
 
-    Question getQuestionFromQueue();
+    String getQuestion();
 
-    void addAnswer(Answer givenAnswer);
+    void addAnswer(Boolean answer);
 
     void resetRound();
 
-    void learnNewFoodAndQuestion(List<FoodFormData> formData, String newQuestionName, String newFoodName);
+    void learnNewQuestion(String newQuestionName, String wrongFood, String newFood);
 }

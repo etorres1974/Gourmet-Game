@@ -13,8 +13,8 @@ public class Strings {
         return "O prato que voce pensou é " + foodName + "?";
     }
 
-    public static String formatLearnQuestion(String foodName) {
-        return "Errei, mas voce pode me dizer uma característica de " + foodName;
+    public static String formatLearnQuestion(String wrongFood, String newFood) {
+        return newFood + " é ______ mas " + wrongFood +" não.";
     }
 
     public static String formatChooseOptions(String foodDescription) {
@@ -24,4 +24,5 @@ public class Strings {
     public static String formatGuessText(String foodDescription) {
         return "A resposta é " + foodDescription + "?";
     }
+
 }

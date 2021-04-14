@@ -1,17 +1,16 @@
 package domain.useCases;
 
 import data.FoodAndQuestionsDataSource;
-import domain.entity.Question;
+import domain.entity.QuestionNode;
 
-import java.util.List;
-
-public class GetInitialQuestions {
+public class GetInitialQuestion {
     private final FoodAndQuestionsDataSource dataProvider;
-    public GetInitialQuestions(FoodAndQuestionsDataSource dataProvider){
+
+    public GetInitialQuestion(FoodAndQuestionsDataSource dataProvider) {
         this.dataProvider = dataProvider;
     }
 
-    public List<Question> execute() {
-        return dataProvider.getInitialQuestions();
+    public QuestionNode execute() {
+        return dataProvider.getInitialQuestion();
     }
 }
